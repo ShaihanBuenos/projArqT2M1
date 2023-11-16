@@ -3,7 +3,7 @@ spring:
     serialization:
       write_dates_as_timestamps: false
   datasource:
-    url: jdbc:postgresql://localhost:5432/projarc
+    url: jdbc:postgresql://localhost:5432/ms-1
     username: postgres
     password: ${POSTGRES_PASSWORD}
   jpa:
