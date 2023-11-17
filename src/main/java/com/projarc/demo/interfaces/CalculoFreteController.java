@@ -7,6 +7,7 @@ import com.projarc.demo.application.usecase.ListaOrcamentos_UC;
 import com.projarc.demo.domain.dto.CidadeDTO;
 import com.projarc.demo.domain.dto.OrcamentoDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import java.util.Map;
 @RestController
 @CrossOrigin("*")
 @RequiredArgsConstructor
+@Slf4j
 public class CalculoFreteController {
 
     @Autowired
@@ -46,6 +48,7 @@ public class CalculoFreteController {
 
     @GetMapping("/orcamento/{dataCriacao}")
     public ResponseEntity<List<OrcamentoDTO>> getOrcamentPorData(@PathVariable LocalDate dataCriacao) {
+        log.info("Buscando orcamentos no MS-2 pela data {}", dataCriacao);
         return ResponseEntity.ok(listaOrcamentosUc.getListaOrcamentos(dataCriacao));
     }
 
