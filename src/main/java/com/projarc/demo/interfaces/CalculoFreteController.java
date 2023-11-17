@@ -63,4 +63,8 @@ public class CalculoFreteController {
         }
     }
 
+    @GetMapping("/hello")
+    public ResponseEntity<String> hello() {
+        return ResponseEntity.ok("Hello from MS-1");
+    }
 }

@@ -17,7 +17,7 @@ services:
     ports:
       - "5435:5432"  # Mapeia a porta 5435 do host para a porta padrão do PostgreSQL (5432) no contêiner
     environment:
-      POSTGRES_DB: teste        # Define o nome do banco de dados
+      POSTGRES_DB: ms1        # Define o nome do banco de dados
       POSTGRES_USER: postgres   # Define o usuário
       POSTGRES_PASSWORD: 123    # Define a senha
     networks:
