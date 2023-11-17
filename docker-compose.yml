@@ -10,6 +10,7 @@ services:
     depends_on:
       - postgres
     networks:
+      - minha_rede_comum
       - postgres
 
   postgres:
@@ -24,6 +25,8 @@ services:
       - postgres
 
 networks:
+  minha_rede_comum:
+    external: true
   postgres:
     driver: bridge
 

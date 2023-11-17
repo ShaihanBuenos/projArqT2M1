@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
-@FeignClient(name = "orcamento", url = "http://localhost:8081")
+@FeignClient(name = "orcamento", url = "http://host.docker.internal:8081")
 public interface OrcamentoFeignClient {
 
     @PostMapping(value = "/orcamento/get/{dataCriacao}")
