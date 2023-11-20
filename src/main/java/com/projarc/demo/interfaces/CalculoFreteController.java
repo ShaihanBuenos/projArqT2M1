@@ -2,12 +2,14 @@ package com.projarc.demo.interfaces;
 
 import com.projarc.demo.application.usecase.CEPAtendido_UC;
 import com.projarc.demo.application.usecase.CidadesAtendidas_UC;
-import com.projarc.demo.application.usecase.CriaOrcamento_UC;
 import com.projarc.demo.application.usecase.ListaOrcamentos_UC;
 import com.projarc.demo.domain.dto.CidadeDTO;
 import com.projarc.demo.domain.dto.OrcamentoDTO;
+import com.projarc.demo.domain.dto.OrcamentoProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,16 +27,19 @@ import java.util.Map;
 public class CalculoFreteController {
 
     @Autowired
-    private final CidadesAtendidas_UC cidadesAtendidasUC;
+    private CidadesAtendidas_UC cidadesAtendidasUC;
 
     @Autowired
-    private final CEPAtendido_UC cepAtendidoUc;
+    private CEPAtendido_UC cepAtendidoUc;
 
     @Autowired
-    private final ListaOrcamentos_UC listaOrcamentosUc;
+    private ListaOrcamentos_UC listaOrcamentosUc;
 
     @Autowired
-    private final CriaOrcamento_UC criaOrcamentoUc;
+    private RabbitTemplate template;
+
+    @Autowired
+    private FanoutExchange fanout;
 
     @GetMapping("/cidades-atendidas")
     public ResponseEntity<List<CidadeDTO>> getCidadesAtendidas() {
@@ -53,13 +58,14 @@ public class CalculoFreteController {
     }
 
     @PostMapping("/orcamento")
-    public ResponseEntity<OrcamentoDTO> criaOrcamento(@RequestParam String cepOrigem,
+    public void criaOrcamento(@RequestParam String cepOrigem,
                                                       @RequestParam String cepDestino,
-                                                      @RequestParam BigDecimal peso) {
+                                                      @RequestParam BigDecimal peso) throws Exception {
         try {
-            return ResponseEntity.ok(criaOrcamentoUc.criarOrcamento(cepOrigem, cepDestino, peso));
+            OrcamentoProducer orcamentoDTO = new OrcamentoProducer(cepOrigem, cepDestino, peso);
+            template.convertAndSend(fanout.getName(), "", orcamentoDTO);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            throw new Exception("Erro ao publicar orçamento na fila");
         }
     }
 

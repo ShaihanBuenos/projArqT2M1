@@ -15,10 +15,6 @@ public class CEPAtendido_UC {
     @Autowired
     private final ServicoCidade servicoCidade;
 
-    public List<CidadeDTO> getCidadesAtendidas() {
-        return servicoCidade.getCidades();
-    }
-
     public boolean cepAtendido(String numero) {
         return servicoCidade.cepAtendido(numero);
     }

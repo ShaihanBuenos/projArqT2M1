@@ -12,6 +12,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ListaOrcamentos_UC {
+
     @Autowired
     private final ServicoOrcamento servicoOrcamento;
 

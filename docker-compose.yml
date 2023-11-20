@@ -9,10 +9,25 @@ services:
       - "8080:8080"  # Alterado para mapear a porta 8081 do host para a porta 8081 do contêiner
     depends_on:
       - postgres
+      - rabbitmq
     networks:
       - minha_rede_comum
       - postgres
-
+    environment:
+      - spring.rabbitmq.host=rabbitmq
+      - spring.rabbitmq.port=5672
+      - spring.rabbitmq.username=engsoft2
+      - spring.rabbitmq.password=engsoft2
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=engsoft2
+      - RABBITMQ_DEFAULT_PASS=engsoft2
+    networks:
+      - minha_rede_comum
   postgres:
     image: postgres
     ports:
@@ -20,7 +35,7 @@ services:
     environment:
       POSTGRES_DB: ms1        # Define o nome do banco de dados
       POSTGRES_USER: postgres   # Define o usuário
-      POSTGRES_PASSWORD: 123    # Define a senha
+      POSTGRES_PASSWORD: 123456    # Define a senha
     networks:
       - postgres
 
